@@ -29,10 +29,18 @@ def read_query(connection,query):
 
 # pw="googlemelty@2003"
 # dbname="ezyshop"
-# q1="select Username from login where Username='ayushji'"
+# q1="select * from products"
 # connection=create_db_connection("localhost","root",pw,dbname)
 # results=read_query(connection,q1)
-# print(type(results[0][0]))
+# for result in results:
+#     print(result)
+# uname=input()
+# if uname==results[0][0]:
+#     print("true")
+# else:
+#     print("false")
+
+
 # num=int(results[0][0])
 # num+=1
 # print(num)
