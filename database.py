@@ -10,7 +10,8 @@ def check(uname):
         return True
     else:
         return False
-    
+def vendor_menu(name):
+    print(f"Hello {name}\nChoose from following:\n1.)Add new product\n2.)Show my products\n3.)Update product\n4.)Delete product\n5.)Exit")    
 def menu1():
     print("WELCOME TO EZYSHOP\n1.)Admin\n2.)Vendor\n3.)Customer\n4.)Exit\nEnter as?")
 def menu2():
@@ -154,7 +155,12 @@ while n!=3:
             if cat==1:
                 pass
             if cat==2:
-                pass
+                vendor_menu()
+                m=int(input())
+                while  m!=5:
+                    if m==1:
+                        addnewprod()
+
             if cat==3:
                 pass
 
