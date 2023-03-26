@@ -5,6 +5,40 @@ from mysql.connector import Error
 
 def customer_menu(name):
     print(f"Hello {name}\nChoose from following:\n1.)Show products\n2.)Add to cart\n3.)Show cart details\n4.)Exit")
+def showstat():
+    print("Choose from following:\n1.)data of product's name and category with total stock\n2.)data of product's name and category with stock in cube\n3.)data of different billing types with address\n4.)data of different billing types with address in cube\n5.)Return")
+    ch=int(input())
+    if ch==1:
+        q="select Category,ProductName,sum(Stock) from products group by Category,ProductName with rollup"
+        connection=create_db_connection("localhost","root",pw,dbname)
+        results=read_query(connection,q)
+        for result in results:
+            print(result)
+        connection.close()
+    if ch==2:
+        q="select Category,ProductName,sum(Stock) from products group by Category,ProductName with rollup union select Category,ProductName,sum(Stock) from products group by ProductName,Category with rollup"
+        connection=create_db_connection("localhost","root",pw,dbname)
+        results=read_query(connection,q)
+        for result in results:
+            print(result)
+        connection.close()
+        
+    if ch==3:
+        q="select b.payment,c.address,avg(c.amount) from billing as b inner JOIN cart as c on b.refcartid=c.idcart group by b.payment,c.address with rollup"
+        connection=create_db_connection("localhost","root",pw,dbname)
+        results=read_query(connection,q)
+        for result in results:
+            print(result)
+        connection.close()
+    if ch==4:
+        q="select b.payment,c.address,avg(c.amount) from billing as b inner JOIN cart as c on b.refcartid=c.idcart group by b.payment,c.address with rollup union select b.payment,c.address,avg(c.amount) from billing as b inner join cart as c on b.refcartid=c.idcart group by c.address,b.payment with rollup"
+        connection=create_db_connection("localhost","root",pw,dbname)
+        results=read_query(connection,q)
+        for result in results:
+            print(result)
+        connection.close()
+    if ch==5:
+        return
 def showproducts():
     q="select idProducts,ProductName,Stock,Price from products"
     connection=create_db_connection("localhost","root",pw,dbname)
@@ -12,6 +46,7 @@ def showproducts():
     for result in results:
         print(result)
     connection.close()
+
 def showmycart(uname):
     q1=f"Select idcustomer from customer where ref_name='{uname}';"
     connection=create_db_connection("localhost","root",pw,dbname)
@@ -74,7 +109,7 @@ def check(uname):
     else:
         return False
 def admin_menu(name):
-    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors\n2.)Delete vendors\n3.)Exit")
+    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors\n2.)Delete vendors\n3.)Instantaneous analysis of data\n4.)Exit")
 def vendor_menu(name):
     print(f"Hello {name}\nChoose from following:\n1.)Add new product\n2.)Show my products\n3.)Update product\n4.)Delete product\n5.)Exit")    
 def menu1():
@@ -87,20 +122,23 @@ def login(cat,username,password):
         q1=f"select Password from admin where admin_username='{username}';"
         connection=create_db_connection("localhost","root",pw,dbname)
         results=read_query(connection,q1)
-        if results[0][0]==password:
-            return True
+        if len(results)>0:
+            if results[0][0]==password:
+                return True
     if cat==2:
         q1=f"select Password from vendor where ref_username='{username}';"
         connection=create_db_connection("localhost","root",pw,dbname)
         results=read_query(connection,q1)
-        if results[0][0]==password:
-            return True
+        if len(results)>0:
+            if results[0][0]==password:
+                return True
     if cat==3:
         q1=f"select Password from customer where ref_name='{username}';"
         connection=create_db_connection("localhost","root",pw,dbname)
         results=read_query(connection,q1)
-        if results[0][0]==password:
-            return True
+        if len(results)>0:
+            if results[0][0]==password:
+                return True
     return False
 def signup_admin():
     q1="select max(idAdmin) from admin"
@@ -222,9 +260,13 @@ while n!=3:
             if cat==1:
                 admin_menu(uname)
                 m=int(input())
-                while m!=3:
+                while m!=4:
                     if m==1:
                         showvend(uname)
+                    if m==3:
+                        showstat()
+                    admin_menu(uname)
+                    m=int(input())
             if cat==2:
                 vendor_menu(uname)
                 m=int(input())
