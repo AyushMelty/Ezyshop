@@ -117,7 +117,7 @@ def check(uname):
         return False
 def admin_menu(name):
     # print(f"Hello {name}\nChoose from following:\n1.)Show all vendors\n2.)Delete vendors\n3.)Instantaneous analysis of data\n4.)Exit")
-    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors under me\n2.)Add new vendor\n3.)Delete vendors\n4.)Instantaneous analysis of data\n5.)Exit")
+    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors under me\n2.)Add new vendor\n3.)Delete vendors\n4.)Instantaneous analysis of data\n5.)Show Feedback\n6.)Exit")
     
 def vendor_menu(name):
     print(f"Hello {name}\nChoose from following:\n1.)Add new product\n2.)Show my products\n3.)Delete product\n4.)Exit")    
@@ -273,10 +273,18 @@ def showvendpro(uname):
         print(result[0],result[1],result[2],result[3],result[4],result[5])
 def addtocart(uname):
     # connection=create_db_connection("localhost","root",pw,dbname)
+    
     pr_id= int(input("Product id you want to add: "))
     quantity=int(input("Enter the quantity: "))
     q1=f"Select idcustomer from customer where ref_name='{uname}'"
+    qry=f"Select Stock from products where idProducts={pr_id}"
     connection=create_db_connection("localhost","root",pw,dbname)
+    rts=read_query(connection,qry)
+    total=int(rts[0][0])
+
+    if quantity>total:
+        print("Given quantity is greater than stock!!!")
+        return
 
     reusult2=read_query(connection,q1)
     num2=int(reusult2[0][0])
@@ -342,8 +350,17 @@ def delvend(id):
 def editcart(uname):
     pr_id=int(input("Enter the product ID:"))
     quantity=int(input("Enter new quantity:"))
-    q=f"update cartwithproducts as cwp set cwp.quantity={quantity} where prodref_id={pr_id}"
+    qry=f"Select Stock from products where idProducts={pr_id}"
     connection=create_db_connection("localhost","root",pw,dbname)
+    rts=read_query(connection,qry)
+    total=int(rts[0][0])
+
+    if quantity>total:
+        print("Given quantity is greater than stock!!!")
+        return
+
+    q=f"update cartwithproducts as cwp set cwp.quantity={quantity} where prodref_id={pr_id}"
+    # connection=create_db_connection("localhost","root",pw,dbname)
     exe_query(connection,q)
     # updatecartamt(uname)
 
