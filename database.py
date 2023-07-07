@@ -117,7 +117,7 @@ def check(uname):
         return False
 def admin_menu(name):
     # print(f"Hello {name}\nChoose from following:\n1.)Show all vendors\n2.)Delete vendors\n3.)Instantaneous analysis of data\n4.)Exit")
-    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors under me\n2.)Add new vendor\n3.)Delete vendors\n4.)Instantaneous analysis of data\n5.)Show Feedback\n6.)Exit")
+    print(f"Hello {name}\nChoose from following:\n1.)Show all vendors under me\n2.)Add new vendor\n3.)Delete vendors\n4.)Instantaneous analysis of data\n5.)Exit")
     
 def vendor_menu(name):
     print(f"Hello {name}\nChoose from following:\n1.)Add new product\n2.)Show my products\n3.)Delete product\n4.)Exit")    
